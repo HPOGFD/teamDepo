@@ -9,6 +9,10 @@ class DatabaseService {
     const { rows } = await pool.query('SELECT * FROM roles');
     return rows;
   }
+  static async getEmployees() {
+    const { rows } = await pool.query('SELECT * FROM employees');
+    return rows;
+  }
 }
 
 export default DatabaseService;
