@@ -34,9 +34,12 @@ async function startApp() {
         const roles = await DatabaseService.getRoles();
         console.table(roles);
         break;
-    // case 'View all employees':
-    //   await viewEmployees();
-    //   break;
+
+        case 'View all employees':
+        const employees = await DatabaseService.getEmployees();
+        console.table(employees);
+        break;
+ 
     // case 'Add a department':
     //   await addDepartment();
     //   break;
