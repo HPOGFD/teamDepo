@@ -39,10 +39,13 @@ async function startApp() {
         const employees = await DatabaseService.getEmployees();
         console.table(employees);
         break;
- 
-    // case 'Add a department':
-    //   await addDepartment();
-    //   break;
+
+        case 'Add a department':
+        const newDepartment = await DatabaseService.addDepartment();
+        console.log('Added Department:', newDepartment);
+        break;
+        
+  
     // case 'Add a role':
     //   await addRole();
     //   break;

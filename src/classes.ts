@@ -1,4 +1,5 @@
 import { pool } from "./connection.js";
+import inquirer from 'inquirer';
 
 class DatabaseService {
   static async getDepartments() {
@@ -13,6 +14,17 @@ class DatabaseService {
     const { rows } = await pool.query('SELECT * FROM employees');
     return rows;
   }
+  static async addDepartment(){
+    const { name } = await inquirer.prompt([
+      {
+        type: 'input',
+        name: 'name',
+        message: 'What is the name of the department?',
+      },
+    ]);
+    await pool.query('INSERT INTO departments (name) VALUES ($1)', [name]);
+
+  };
 }
 
 export default DatabaseService;
