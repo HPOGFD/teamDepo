@@ -25,6 +25,23 @@ class DatabaseService {
     await pool.query('INSERT INTO departments (name) VALUES ($1)', [name]);
 
   };
+  static async addRole(){
+    const { title, salary, departmentId }  = await inquirer.prompt([
+      { 
+        type: 'input', 
+        name: 'title',
+        message: 'Enter role title:' },
+      { 
+        type: 'number', 
+        name: 'salary', 
+        message: 'Enter role salary:' },
+      { 
+        type: 'number', 
+        name: 'departmentId', 
+        message: 'Enter department ID:' },
+    ]);
+    await pool.query('INSERT INTO roles (title, salary, department_id) VALUES ($1, $2, $3)', [title, salary, departmentId]);
+  };
 }
 
 export default DatabaseService;
