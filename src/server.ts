@@ -1,5 +1,5 @@
 import inquirer from 'inquirer';
-import DatabaseService from './classes'; // Adjust the path as necessary
+import DatabaseService from './classes.js'; // Adjust the path as necessary
 
 
 async function startApp() {

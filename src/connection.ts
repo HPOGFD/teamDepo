@@ -15,10 +15,15 @@ const pool = new Pool({
 
 // Test the connection
 pool.connect()
-  .then(client => {
-    console.log('Connected to the database');
-    client.release();
-  })
-  .catch(err => console.error('Error connecting to the database:', err.stack));
-
-export default pool;
+const connectToDb = async () => {
+    try {
+      await pool.connect();
+      console.log('Connected to the database.');
+    } catch (err) {
+      console.error('Error connecting to database:', err);
+      process.exit(1);
+    }
+  };
+  
+  export { pool, connectToDb };
+  
