@@ -1,4 +1,6 @@
-import { Pool } from 'pg';
+import pkg from 'pg'; // Default import
+const { Pool } = pkg; // Destructuring to access Pool
+
 import dotenv from 'dotenv';
 
 // Load environment variables from .env file
