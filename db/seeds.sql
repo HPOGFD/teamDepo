@@ -17,10 +17,8 @@ VALUES
   ('Sales Manager', 75000, 4),
   ('Legal Assistant', 45000, 3),
   ('Sales Lead', 65000, 4),
-  ('Lead Engineer', 85000, 1),
-  ('CFO', 85000, 2),
-  ('CEO', 100000, 1),
-  ('CTO', 90000, 1);
+  ('Lead Engineer', 85000, 1);
+
 
 -- Seed employees
 INSERT INTO employees (first_name, last_name, role_id, manager_id) 
@@ -46,23 +44,4 @@ VALUES
   ('Willow', 'Davis', 1, 3),
   ('Xavier', 'Oyarvide', 2, 1),
   ('Yara', 'Smith', 3, 2),
-  ('Zane', 'Brown', 1, 3),
-  ('Ava', 'Davis', 2, 1),
-  ('Ben', 'Oyarvide', 3, 2),
-  ('Cora', 'Smith', 1, 3),
-  ('Dax', 'Brown', 2, 1),
-  ('Ella', 'Davis', 3, 2),
-  ('Finn', 'Oyarvide', 1, 3),
-  ('Gia', 'Smith', 2, 1),
-  ('Hank', 'Brown', 3, 2),
-  ('Isla', 'Davis', 1, 3),
-  ('Jack', 'Oyarvide', 2, 1),
-  ('Kara', 'Smith', 3, 2),
-  ('Liam', 'Brown', 1, 3),
-  ('Mia', 'Davis', 2, 1),
-  ('Noah', 'Oyarvide', 3, 2),
-  ('Olivia', 'Smith', 1, 3),
-  ('Parker', 'Brown', 2, 1),
-  ('Quinn', 'Davis', 3, 2),
-  ('Riley', 'Oyarvide', 1, 3),
-  ('Sophia', 'Smith', 2, 1);
+  ('Zane', 'Brown', 1, 3);

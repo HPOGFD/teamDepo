@@ -8,7 +8,6 @@ CREATE DATABASE employees_db;
 CREATE TABLE departments (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL
-    DROP INDEX IF EXISTS name
 );
 
 -- Roles table

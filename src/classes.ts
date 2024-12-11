@@ -7,11 +7,26 @@ class DatabaseService {
     return rows;
   }
   static async getRoles() {
-    const { rows } = await pool.query('SELECT * FROM roles');
+    const { rows } = await pool.query(`
+      SELECT departments.name AS department, roles.title, roles.salary FROM departments JOIN roles ON departments.id = roles.department_id`);
     return rows;
   }
   static async getEmployees() {
-    const { rows } = await pool.query('SELECT * FROM employees');
+    const { rows } = await pool.query(`
+      SELECT 
+  employees.id AS employee_id, 
+  employees.first_name, 
+  employees.last_name, 
+  roles.title, 
+  roles.salary, 
+  departments.name AS department, 
+  manager.first_name AS manager
+FROM employees 
+JOIN roles ON employees.role_id = roles.id 
+JOIN departments ON roles.department_id = departments.id
+LEFT JOIN employees AS manager ON employees.manager_id = manager.id;
+
+    `);
     return rows;
   }
 
