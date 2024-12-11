@@ -41,10 +41,16 @@ class DatabaseService {
                 message: 'What is the name of the department?',
             },
         ]);
-        await pool.query('INSERT INTO departments (name) VALUES ($1)', [name]);
+        // Insert the new department and return the inserted row
+        const { rows } = await pool.query('INSERT INTO departments (name) VALUES ($1) RETURNING *', [name]);
+        // Extract the inserted department
+        const newDepartment = rows[0];
+        // Display a success message with the department name
+        console.log(`Added Department: ${newDepartment.name}`);
     }
-    ;
+    // ADD ROLE
     static async addRole() {
+        const departments = await this.getDepartments();
         const { title, salary, departmentId } = await inquirer.prompt([
             {
                 type: 'input',
@@ -57,9 +63,13 @@ class DatabaseService {
                 message: 'Enter role salary:'
             },
             {
-                type: 'number',
+                type: 'list',
                 name: 'departmentId',
-                message: 'Enter department ID:'
+                message: 'Which department does the role belong to?',
+                choices: departments.map((dept) => ({
+                    name: dept.name, // Display the department name
+                    value: dept.id, // Store the department ID as the choice's value
+                })),
             },
         ]);
         await pool.query('INSERT INTO roles (title, salary, department_id) VALUES ($1, $2, $3)', [title, salary, departmentId]);
