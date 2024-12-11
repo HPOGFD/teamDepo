@@ -49,10 +49,13 @@ async function startApp() {
         const newRole = await DatabaseService.addRole();
         console.log('Added Role:', newRole);
         break;
+
+        case 'Add an employee':
+        const newEmployee = await DatabaseService.addEmployee();    
+        console.log('Added Employee:', newEmployee);
+        break;
    
-    // case 'Add an employee':
-    //   await addEmployee();
-    //   break;
+  
     // case 'Update an employee role':
     //   await updateEmployeeRole();
     //   break;

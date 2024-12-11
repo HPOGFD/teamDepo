@@ -14,6 +14,8 @@ class DatabaseService {
     const { rows } = await pool.query('SELECT * FROM employees');
     return rows;
   }
+
+  // Add Department
   static async addDepartment(){
     const { name } = await inquirer.prompt([
       {
@@ -25,6 +27,7 @@ class DatabaseService {
     await pool.query('INSERT INTO departments (name) VALUES ($1)', [name]);
 
   };
+
   static async addRole(){
     const { title, salary, departmentId }  = await inquirer.prompt([
       { 
@@ -42,6 +45,28 @@ class DatabaseService {
     ]);
     await pool.query('INSERT INTO roles (title, salary, department_id) VALUES ($1, $2, $3)', [title, salary, departmentId]);
   };
+
+  static async addEmployee(){
+    const { firstName, lastName, roleId, managerId} = await inquirer.prompt([
+      {
+        type: 'input',
+        name: 'firstName',
+        message: 'Enter employee first name:'},
+      {
+        type: 'input',
+        name: 'lastName',
+        message: 'Enter employee last name:'},
+      {
+        type: 'input',
+        name: 'roleId',
+        message: 'Enter role'},
+        
+      {
+        type: 'input',
+        name: 'managerId',
+        message: 'Enter manager ID:'},
+    ]);
+    await pool.query('INSERT INTO employees (first_name, last_name, role_id, manager_id) VALUES ($1, $2, $3, $4)', [firstName, lastName, roleId, managerId]);
 }
 
 export default DatabaseService;
