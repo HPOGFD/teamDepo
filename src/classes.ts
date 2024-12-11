@@ -67,6 +67,25 @@ class DatabaseService {
         message: 'Enter manager ID:'},
     ]);
     await pool.query('INSERT INTO employees (first_name, last_name, role_id, manager_id) VALUES ($1, $2, $3, $4)', [firstName, lastName, roleId, managerId]);
-}
+  }
+
+  static async updateEmployeeRole(){
+    const { employeeId, roleId } = await inquirer.prompt([
+      {
+        type: 'input',
+        name: 'employeeId',
+        message: 'Enter employee ID:'},
+      {
+        type: 'input',
+        name: 'roleId',
+        message: 'Enter new role ID:'},
+    ]);
+    await pool.query('UPDATE employees SET role_id = $1 WHERE id = $2', [roleId, employeeId]);
+  }
+};
+
+
+
+
 
 export default DatabaseService;

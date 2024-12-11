@@ -55,10 +55,12 @@ async function startApp() {
         console.log('Added Employee:', newEmployee);
         break;
    
-  
-    // case 'Update an employee role':
-    //   await updateEmployeeRole();
-    //   break;
+        case 'Update an employee role':
+        const updatedEmployee = await DatabaseService.updateEmployeeRole();
+        console.log('Updated Employee:', updatedEmployee);
+        break;
+
+   
     // case 'Exit':
     //   console.log('Goodbye!');
     //   process.exit(0);
