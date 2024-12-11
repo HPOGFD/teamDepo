@@ -117,7 +117,7 @@ class DatabaseService {
             {
                 type: 'list',
                 name: 'employeeId',
-                message: 'Enter employee Name:',
+                message: 'Which employee do you want to update?',
                 choices: employees.map((employee) => ({
                     name: `${employee.first_name} ${employee.last_name}`,
                     value: employee.id,
@@ -126,7 +126,7 @@ class DatabaseService {
             {
                 type: 'list',
                 name: 'roleId',
-                message: 'Enter role',
+                message: 'Which role do you want to assign the selected employee?',
                 choices: roles.map((role) => ({
                     name: role.title,
                     value: role.id,
