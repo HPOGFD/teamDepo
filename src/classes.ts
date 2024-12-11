@@ -3,29 +3,36 @@ import inquirer from 'inquirer';
 
 class DatabaseService {
   static async getDepartments() {
-    const { rows } = await pool.query('SELECT * FROM departments');
+    const { rows } = await pool.query(
+      'SELECT * FROM departments'
+    );
     return rows;
   }
   static async getRoles() {
     const { rows } = await pool.query(`
-      SELECT departments.name AS department, roles.title, roles.salary FROM departments JOIN roles ON departments.id = roles.department_id`);
+      SELECT 
+      departments.name AS department, 
+      roles.title, 
+      roles.salary 
+      FROM departments 
+      JOIN roles ON departments.id = roles.department_id`
+    );
     return rows;
   }
   static async getEmployees() {
     const { rows } = await pool.query(`
       SELECT 
-  employees.id AS employee_id, 
-  employees.first_name, 
-  employees.last_name, 
-  roles.title, 
-  roles.salary, 
-  departments.name AS department, 
-  manager.first_name AS manager
-FROM employees 
-JOIN roles ON employees.role_id = roles.id 
-JOIN departments ON roles.department_id = departments.id
-LEFT JOIN employees AS manager ON employees.manager_id = manager.id;
-
+      employees.id AS employee_id, 
+      employees.first_name, 
+      employees.last_name, 
+      roles.title, 
+      roles.salary, 
+      departments.name AS department, 
+      manager.first_name AS manager
+      FROM employees 
+      JOIN roles ON employees.role_id = roles.id 
+      JOIN departments ON roles.department_id = departments.id
+      LEFT JOIN employees AS manager ON employees.manager_id = manager.id;
     `);
     return rows;
   }
@@ -39,8 +46,8 @@ LEFT JOIN employees AS manager ON employees.manager_id = manager.id;
         message: 'What is the name of the department?',
       },
     ]);
-    await pool.query('INSERT INTO departments (name) VALUES ($1)', [name]);
-
+    await pool.query(
+      'INSERT INTO departments (name) VALUES ($1)', [name]);
   };
 
   static async addRole(){
