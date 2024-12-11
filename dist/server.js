@@ -49,9 +49,10 @@ async function startApp() {
                 const updatedEmployee = await DatabaseService.updateEmployeeRole();
                 console.log('Updated Employee:', updatedEmployee);
                 break;
-            // case 'Exit':
-            //   console.log('Goodbye!');
-            //   process.exit(0);
+            case 'Exit':
+                console.log('Goodbye!');
+                process.exit(0);
+                break;
         }
         mainMenu();
     };
