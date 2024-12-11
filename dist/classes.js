@@ -76,6 +76,8 @@ class DatabaseService {
     }
     ;
     static async addEmployee() {
+        const roles = await this.getRoles();
+        const manager = await this.getEmployees();
         const { firstName, lastName, roleId, managerId } = await inquirer.prompt([
             {
                 type: 'input',
@@ -88,29 +90,47 @@ class DatabaseService {
                 message: 'Enter employee last name:'
             },
             {
-                type: 'input',
+                type: 'list',
                 name: 'roleId',
-                message: 'Enter role'
+                message: 'Enter role',
+                choices: roles.map((role) => ({
+                    name: role.title,
+                    value: role.id,
+                })),
             },
             {
-                type: 'input',
+                type: 'list',
                 name: 'managerId',
-                message: 'Enter manager ID:'
-            },
+                message: 'Enter manager ID:',
+                choices: manager.map((manager) => ({
+                    name: manager.first_name,
+                    value: manager.id,
+                })),
+            }
         ]);
         await pool.query('INSERT INTO employees (first_name, last_name, role_id, manager_id) VALUES ($1, $2, $3, $4)', [firstName, lastName, roleId, managerId]);
     }
     static async updateEmployeeRole() {
+        const employees = await this.getEmployees();
+        const roles = await this.getRoles();
         const { employeeId, roleId } = await inquirer.prompt([
             {
-                type: 'input',
+                type: 'list',
                 name: 'employeeId',
-                message: 'Enter employee ID:'
+                message: 'Enter employee Name:',
+                choices: employees.map((employee) => ({
+                    name: `${employee.first_name} ${employee.last_name}`,
+                    value: employee.id,
+                })),
             },
             {
-                type: 'input',
+                type: 'list',
                 name: 'roleId',
-                message: 'Enter new role ID:'
+                message: 'Enter role',
+                choices: roles.map((role) => ({
+                    name: role.title,
+                    value: role.id,
+                })),
             },
         ]);
         await pool.query('UPDATE employees SET role_id = $1 WHERE id = $2', [roleId, employeeId]);
