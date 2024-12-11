@@ -39,19 +39,28 @@ async function startApp() {
         const employees = await DatabaseService.getEmployees();
         console.table(employees);
         break;
- 
-    // case 'Add a department':
-    //   await addDepartment();
-    //   break;
-    // case 'Add a role':
-    //   await addRole();
-    //   break;
-    // case 'Add an employee':
-    //   await addEmployee();
-    //   break;
-    // case 'Update an employee role':
-    //   await updateEmployeeRole();
-    //   break;
+
+        case 'Add a department':
+        const newDepartment = await DatabaseService.addDepartment();
+        console.log('Added Department:', newDepartment);
+        break;
+        
+        case 'Add a role':
+        const newRole = await DatabaseService.addRole();
+        console.log('Added Role:', newRole);
+        break;
+
+        case 'Add an employee':
+        const newEmployee = await DatabaseService.addEmployee();    
+        console.log('Added Employee:', newEmployee);
+        break;
+   
+        case 'Update an employee role':
+        const updatedEmployee = await DatabaseService.updateEmployeeRole();
+        console.log('Updated Employee:', updatedEmployee);
+        break;
+
+   
     // case 'Exit':
     //   console.log('Goodbye!');
     //   process.exit(0);
