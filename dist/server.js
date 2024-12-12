@@ -50,7 +50,7 @@ async function startApp() {
                 console.log('Updated Employee:', updatedEmployee);
                 break;
             case 'Exit':
-                console.log('Goodbye!');
+                console.log('Content management system (CMS) is closing. Goodbye!');
                 process.exit(0);
                 break;
         }

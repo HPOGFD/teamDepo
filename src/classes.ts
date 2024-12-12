@@ -1,11 +1,10 @@
 import { pool } from "./connection.js";
 import inquirer from 'inquirer';
+import getDept from "./queries/getDepartements.js";
 
 class DatabaseService {
   static async getDepartments() {
-    const { rows } = await pool.query(
-      'SELECT * FROM departments'
-    );
+    const { rows } = await pool.query(getDept());
     return rows;
   }
   static async getRoles() {
