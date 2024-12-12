@@ -62,29 +62,39 @@ static async getRoles() {
 
 // ADD ROLE
   static async addRole(){
-    const departments = await this.getDepartments();
-    const { title, salary, departmentId }  = await inquirer.prompt([
-      { 
-        type: 'input', 
-        name: 'title',
-        message: 'Enter role title:' 
-      },
-      { 
-        type: 'number', 
-        name: 'salary', 
-        message: 'Enter role salary:' 
-      },
-      { 
-        type: 'list', 
-        name: 'departmentId', 
-        message: 'Which department does the role belong to?',
-        choices: departments.map((dept) => ({
-          name: dept.name, // Display the department name
-          value: dept.id,  // Store the department ID as the choice's value
-        })),
-      },
-    ]);
-    await pool.query(addRoles(title, salary, departmentId));
+    try{
+      const departments = await this.getDepartments();
+      const { title, salary, departmentId } = await inquirer.prompt([
+        {
+          type: 'input',
+          name: 'title',
+          message: 'Enter role title:',
+          validate: (input) => input.trim() === '' ? 'Title name cannot be empty' : true,
+        },
+        {
+          type: 'number',
+          name: 'salary',
+          message: 'Enter role salary:',
+          validate: (input) => {
+            const salary = Number(input);
+            return isNaN(salary) || salary <= 0 ? 'Salary must be a positive number' : true;
+          },
+        },
+        {
+          type: 'list',
+          name: 'departmentId',
+          message: 'Which department does the role belong to?',
+          choices: departments.map((dept) => ({
+            name: dept.name, // Display the department name
+            value: dept.id,  // Store the department ID as the choice's value
+          })),
+        },
+      ]);
+      await pool.query(addRoles(title, salary, departmentId));
+    }catch (error) {
+      console.log('Error adding role ', error);
+      throw new Error('Failed to add role. Please try again later.');
+    }
   };
 
   static async addEmployee(){
