@@ -3,6 +3,7 @@ import inquirer from 'inquirer';
 import getDept from "./queries/getDepartements.js";
 import getRole from "./queries/getRole.js";
 import getEmployee from "./queries/getEmployee.js";
+import addDept from "./queries/addDept.js";
 
 class DatabaseService {
   static async getDepartments() {
@@ -27,17 +28,7 @@ class DatabaseService {
         message: 'What is the name of the department?',
       },
     ]);
- // Insert the new department and return the inserted row
- const { rows } = await pool.query(
-  'INSERT INTO departments (name) VALUES ($1) RETURNING *',
-  [name]
-);
-
-// Extract the inserted department
-const newDepartment = rows[0];
-
-// Display a success message with the department name
-console.log(`Added Department: ${newDepartment.name}`);
+      await pool.query(addDept(name));
 }
 
 
