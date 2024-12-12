@@ -43,15 +43,21 @@ static async getRoles() {
 
   // Add Department
   static async addDepartment(){
-    const { name } = await inquirer.prompt([
-      {
-        type: 'input',
-        name: 'name',
-        message: 'What is the name of the department?',
-      },
-    ]);
+    try{
+      const { name } = await inquirer.prompt([
+        {
+          type: 'input',
+          name: 'name',
+          message: 'What is the name of the department?',
+          validate: (input) => input.trim() === '' ? 'Department name cannot be empty' : true,
+        },
+      ]);
       await pool.query(addDept(name));
-}
+    } catch (error) {
+      console.log('Error adding department ', error);
+      throw new Error('Failed to add department. Please try again later.');
+    }
+  }
 
 
 // ADD ROLE
