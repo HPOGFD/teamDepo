@@ -20,9 +20,15 @@ class DatabaseService {
   }
 }
 static async getRoles() {
+  try {
     const { rows } = await pool.query(getRole());
     return rows;
   }
+  catch (error) {
+    console.log('Error fetching roles ', error);
+    throw new Error('Failed to retrieve roles. Please try again later.');
+  }
+}
   static async getEmployees() {
     const { rows } = await pool.query(getEmployee());
     return rows;
