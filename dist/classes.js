@@ -1,35 +1,22 @@
 import { pool } from "./connection.js";
 import inquirer from 'inquirer';
+import getDept from "./queries/getDepartements.js";
+import getRole from "./queries/getRole.js";
+import getEmployee from "./queries/getEmployee.js";
+import addDept from "./queries/addDept.js";
+import addRoles from "./queries/addRoles.js";
+import addEmploy from "./queries/addEmploy.js";
 class DatabaseService {
     static async getDepartments() {
-        const { rows } = await pool.query('SELECT * FROM departments');
+        const { rows } = await pool.query(getDept());
         return rows;
     }
     static async getRoles() {
-        const { rows } = await pool.query(`
-      SELECT 
-      departments.name AS department, 
-      roles.title, 
-      roles.salary 
-      FROM departments 
-      JOIN roles ON departments.id = roles.department_id`);
+        const { rows } = await pool.query(getRole());
         return rows;
     }
     static async getEmployees() {
-        const { rows } = await pool.query(`
-      SELECT 
-      employees.id AS employee_id, 
-      employees.first_name, 
-      employees.last_name, 
-      roles.title, 
-      roles.salary, 
-      departments.name AS department, 
-      manager.first_name AS manager
-      FROM employees 
-      JOIN roles ON employees.role_id = roles.id 
-      JOIN departments ON roles.department_id = departments.id
-      LEFT JOIN employees AS manager ON employees.manager_id = manager.id;
-    `);
+        const { rows } = await pool.query(getEmployee());
         return rows;
     }
     // Add Department
@@ -41,12 +28,7 @@ class DatabaseService {
                 message: 'What is the name of the department?',
             },
         ]);
-        // Insert the new department and return the inserted row
-        const { rows } = await pool.query('INSERT INTO departments (name) VALUES ($1) RETURNING *', [name]);
-        // Extract the inserted department
-        const newDepartment = rows[0];
-        // Display a success message with the department name
-        console.log(`Added Department: ${newDepartment.name}`);
+        await pool.query(addDept(name));
     }
     // ADD ROLE
     static async addRole() {
@@ -72,7 +54,7 @@ class DatabaseService {
                 })),
             },
         ]);
-        await pool.query('INSERT INTO roles (title, salary, department_id) VALUES ($1, $2, $3)', [title, salary, departmentId]);
+        await pool.query(addRoles(title, salary, departmentId));
     }
     ;
     static async addEmployee() {
@@ -108,7 +90,8 @@ class DatabaseService {
                 })),
             }
         ]);
-        await pool.query('INSERT INTO employees (first_name, last_name, role_id, manager_id) VALUES ($1, $2, $3, $4)', [firstName, lastName, roleId, managerId]);
+        const { query, values } = addEmploy(firstName, lastName, roleId, managerId);
+        await pool.query({ text: query, values });
     }
     static async updateEmployeeRole() {
         const employees = await this.getEmployees();
