@@ -10,121 +10,169 @@ import updateEmploy from "./queries/updateEmployee.js";
 
 class DatabaseService {
   static async getDepartments() {
-    const { rows } = await pool.query(getDept());
-    return rows;
+    try {
+      const { rows } = await pool.query(getDept());
+      return rows;
+    }
+    catch (error) {
+      console.log('Error fetching department ', error);
+      throw new Error('Failed to retrieve departments. Please try again later.');
   }
-  static async getRoles() {
+}
+static async getRoles() {
+  try {
     const { rows } = await pool.query(getRole());
     return rows;
   }
+  catch (error) {
+    console.log('Error fetching roles ', error);
+    throw new Error('Failed to retrieve roles. Please try again later.');
+  }
+}
   static async getEmployees() {
-    const { rows } = await pool.query(getEmployee());
-    return rows;
+    try{
+      const { rows } = await pool.query(getEmployee());
+      return rows;
+    }
+    catch (error){
+      console.log('Error fetching employees ', error);
+      throw new Error('Failed to retrieve employees. Please try again later.');
+    }
+   
   }
 
   // Add Department
   static async addDepartment(){
-    const { name } = await inquirer.prompt([
-      {
-        type: 'input',
-        name: 'name',
-        message: 'What is the name of the department?',
-      },
-    ]);
+    try{
+      const { name } = await inquirer.prompt([
+        {
+          type: 'input',
+          name: 'name',
+          message: 'What is the name of the department?',
+          validate: (input) => input.trim() === '' ? 'Department name cannot be empty' : true,
+        },
+      ]);
       await pool.query(addDept(name));
-}
+    } catch (error) {
+      console.log('Error adding department ', error);
+      throw new Error('Failed to add department. Please try again later.');
+    }
+  }
 
 
 // ADD ROLE
   static async addRole(){
-    const departments = await this.getDepartments();
-    const { title, salary, departmentId }  = await inquirer.prompt([
-      { 
-        type: 'input', 
-        name: 'title',
-        message: 'Enter role title:' 
-      },
-      { 
-        type: 'number', 
-        name: 'salary', 
-        message: 'Enter role salary:' 
-      },
-      { 
-        type: 'list', 
-        name: 'departmentId', 
-        message: 'Which department does the role belong to?',
-        choices: departments.map((dept) => ({
-          name: dept.name, // Display the department name
-          value: dept.id,  // Store the department ID as the choice's value
-        })),
-      },
-    ]);
-    await pool.query(addRoles(title, salary, departmentId));
+    try{
+      const departments = await this.getDepartments();
+      const { title, salary, departmentId } = await inquirer.prompt([
+        {
+          type: 'input',
+          name: 'title',
+          message: 'Enter role title:',
+          validate: (input) => input.trim() === '' ? 'Title name cannot be empty' : true,
+        },
+        {
+          type: 'number',
+          name: 'salary',
+          message: 'Enter role salary:',
+          validate: (input) => {
+            const salary = Number(input);
+            return isNaN(salary) || salary <= 0 ? 'Salary must be a positive number' : true;
+          },
+        },
+        {
+          type: 'list',
+          name: 'departmentId',
+          message: 'Which department does the role belong to?',
+          choices: departments.map((dept) => ({
+            name: dept.name, // Display the department name
+            value: dept.id,  // Store the department ID as the choice's value
+          })),
+        },
+      ]);
+      await pool.query(addRoles(title, salary, departmentId));
+    }catch (error) {
+      console.log('Error adding role ', error);
+      throw new Error('Failed to add role. Please try again later.');
+    }
   };
 
   static async addEmployee(){
-    const roles = await this.getRoles();
-    const manager = await this.getEmployees();
-    const {firstName, lastName, roleId, managerId} = await inquirer.prompt([
-      {
-        type: 'input',
-        name: 'firstName',
-        message: 'Enter employee first name:'},
-      {
-        type: 'input',
-        name: 'lastName',
-        message: 'Enter employee last name:'},
-      {
-        type: 'list',
-        name: 'roleId',
-        message: 'Enter role',
-        choices: roles.map((role) => ({
-          name: role.title,
-          value: role.id,
-        })),
-      },
-      {
-        type: 'list',
-        name: 'managerId',
-        message: 'Enter manager ID:',
-        choices: manager.map((manager) => ({
-          name: manager.first_name,
-          value: manager.id,
-        })),
-      }]);
-
-    const { query, values } = addEmploy(firstName, lastName, roleId, managerId);
-    await pool.query({ text: query, values });
+    try{
+      const roles = await this.getRoles();
+      const manager = await this.getEmployees();
+      const {firstName, lastName, roleId, managerId} = await inquirer.prompt([
+        {
+          type: 'input',
+          name: 'firstName',
+          message: 'Enter employee first name:',
+          validate: (input) => input.trim() === '' ? 'First name cannot be empty' : true,
+        },
+        {
+          type: 'input',
+          name: 'lastName',
+          message: 'Enter employee last name:',
+          validate: (input) => input.trim() === '' ? 'Last name cannot be empty' : true
+        },
+        {
+          type: 'list',
+          name: 'roleId',
+          message: 'Enter role',
+          choices: roles.map((role) => ({
+            name: role.title,
+            value: role.id,
+          })),
+        },
+        {
+          type: 'list',
+          name: 'managerId',
+          message: 'Enter manager ID:',
+          choices: manager.map((manager) => ({
+            name: manager.first_name,
+            value: manager.id,
+          })),
+        }]);
+  
+      const { query, values } = addEmploy(firstName, lastName, roleId, managerId);
+      await pool.query({ text: query, values });
+    } catch (error) {
+      console.log('Error adding employee ', error);
+      throw new Error('Failed to add employee. Please try again later.');
+   
   }
-
+}
   static async updateEmployeeRole(){
-    const employees = await this.getEmployees();
-    const roles = await this.getRoles();
-    const { employeeId, roleId } = await inquirer.prompt([
-      {
-        type: 'list',
-        name: 'employeeId',
-        message: 'Which employee do you want to update?',
-        choices: employees.map((employee) => ({
-          name: `${employee.first_name} ${employee.last_name}`,
-          value: employee.id,
-        })),
-      },
-      {
-        type: 'list',
-        name: 'roleId',
-        message: 'Which role do you want to assign the selected employee?',
-        choices: roles.map((role) => ({
-          name: role.title,
-          value: role.id,
-        })),
-      },
-    ]);
-    const { query, values } = updateEmploy('name', roleId, employeeId);
-    await pool.query({ text: query, values });
-  }
-};
-
+    try{
+      const employees = await this.getEmployees();
+      const roles = await this.getRoles();
+      const { employeeId, roleId } = await inquirer.prompt([
+        {
+          type: 'list',
+          name: 'employeeId',
+          message: 'Which employee do you want to update?',
+          choices: employees.map((employee) => ({
+            name: `${employee.first_name} ${employee.last_name}`,
+            value: employee.id,
+          })),
+        },
+        {
+          type: 'list',
+          name: 'roleId',
+          message: 'Which role do you want to assign the selected employee?',
+          choices: roles.map((role) => ({
+            name: role.title,
+            value: role.id,
+          })),
+        },
+      ]);
+      const { query, values } = updateEmploy('name', roleId, employeeId);
+      await pool.query({ text: query, values });
+    } catch (error) {
+      console.log('Error updating employee role ', error);
+      throw new Error('Failed to update employee role. Please try again later.');
+    }
+  };
+}
 
 
 
