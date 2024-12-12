@@ -10,10 +10,16 @@ import updateEmploy from "./queries/updateEmployee.js";
 
 class DatabaseService {
   static async getDepartments() {
-    const { rows } = await pool.query(getDept());
-    return rows;
+    try {
+      const { rows } = await pool.query(getDept());
+      return rows;
+    }
+    catch (error) {
+      console.log('Error fetching department ', error);
+      throw new Error('Failed to retrieve departments. Please try again later.');
   }
-  static async getRoles() {
+}
+static async getRoles() {
     const { rows } = await pool.query(getRole());
     return rows;
   }
