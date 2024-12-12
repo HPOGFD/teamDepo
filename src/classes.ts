@@ -1,6 +1,7 @@
 import { pool } from "./connection.js";
 import inquirer from 'inquirer';
 import getDept from "./queries/getDepartements.js";
+import getRole from "./queries/getRole.js";
 
 class DatabaseService {
   static async getDepartments() {
@@ -8,14 +9,7 @@ class DatabaseService {
     return rows;
   }
   static async getRoles() {
-    const { rows } = await pool.query(`
-      SELECT 
-      departments.name AS department, 
-      roles.title, 
-      roles.salary 
-      FROM departments 
-      JOIN roles ON departments.id = roles.department_id`
-    );
+    const { rows } = await pool.query(getRole());
     return rows;
   }
   static async getEmployees() {
