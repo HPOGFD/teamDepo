@@ -5,6 +5,7 @@ import getRole from "./queries/getRole.js";
 import getEmployee from "./queries/getEmployee.js";
 import addDept from "./queries/addDept.js";
 import addRoles from "./queries/addRoles.js";
+import addEmploy from "./queries/addEmploy.js";
 class DatabaseService {
     static async getDepartments() {
         const { rows } = await pool.query(getDept());
@@ -89,7 +90,8 @@ class DatabaseService {
                 })),
             }
         ]);
-        await pool.query('INSERT INTO employees (first_name, last_name, role_id, manager_id) VALUES ($1, $2, $3, $4)', [firstName, lastName, roleId, managerId]);
+        const { query, values } = addEmploy(firstName, lastName, roleId, managerId);
+        await pool.query({ text: query, values });
     }
     static async updateEmployeeRole() {
         const employees = await this.getEmployees();
