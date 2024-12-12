@@ -30,8 +30,15 @@ static async getRoles() {
   }
 }
   static async getEmployees() {
-    const { rows } = await pool.query(getEmployee());
-    return rows;
+    try{
+      const { rows } = await pool.query(getEmployee());
+      return rows;
+    }
+    catch (error){
+      console.log('Error fetching employees ', error);
+      throw new Error('Failed to retrieve employees. Please try again later.');
+    }
+   
   }
 
   // Add Department
