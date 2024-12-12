@@ -98,40 +98,49 @@ static async getRoles() {
   };
 
   static async addEmployee(){
-    const roles = await this.getRoles();
-    const manager = await this.getEmployees();
-    const {firstName, lastName, roleId, managerId} = await inquirer.prompt([
-      {
-        type: 'input',
-        name: 'firstName',
-        message: 'Enter employee first name:'},
-      {
-        type: 'input',
-        name: 'lastName',
-        message: 'Enter employee last name:'},
-      {
-        type: 'list',
-        name: 'roleId',
-        message: 'Enter role',
-        choices: roles.map((role) => ({
-          name: role.title,
-          value: role.id,
-        })),
-      },
-      {
-        type: 'list',
-        name: 'managerId',
-        message: 'Enter manager ID:',
-        choices: manager.map((manager) => ({
-          name: manager.first_name,
-          value: manager.id,
-        })),
-      }]);
-
-    const { query, values } = addEmploy(firstName, lastName, roleId, managerId);
-    await pool.query({ text: query, values });
+    try{
+      const roles = await this.getRoles();
+      const manager = await this.getEmployees();
+      const {firstName, lastName, roleId, managerId} = await inquirer.prompt([
+        {
+          type: 'input',
+          name: 'firstName',
+          message: 'Enter employee first name:',
+          validate: (input) => input.trim() === '' ? 'First name cannot be empty' : true,
+        },
+        {
+          type: 'input',
+          name: 'lastName',
+          message: 'Enter employee last name:',
+          validate: (input) => input.trim() === '' ? 'Last name cannot be empty' : true
+        },
+        {
+          type: 'list',
+          name: 'roleId',
+          message: 'Enter role',
+          choices: roles.map((role) => ({
+            name: role.title,
+            value: role.id,
+          })),
+        },
+        {
+          type: 'list',
+          name: 'managerId',
+          message: 'Enter manager ID:',
+          choices: manager.map((manager) => ({
+            name: manager.first_name,
+            value: manager.id,
+          })),
+        }]);
+  
+      const { query, values } = addEmploy(firstName, lastName, roleId, managerId);
+      await pool.query({ text: query, values });
+    } catch (error) {
+      console.log('Error adding employee ', error);
+      throw new Error('Failed to add employee. Please try again later.');
+   
   }
-
+}
   static async updateEmployeeRole(){
     const employees = await this.getEmployees();
     const roles = await this.getRoles();
