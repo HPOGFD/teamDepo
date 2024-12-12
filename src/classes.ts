@@ -142,33 +142,37 @@ static async getRoles() {
   }
 }
   static async updateEmployeeRole(){
-    const employees = await this.getEmployees();
-    const roles = await this.getRoles();
-    const { employeeId, roleId } = await inquirer.prompt([
-      {
-        type: 'list',
-        name: 'employeeId',
-        message: 'Which employee do you want to update?',
-        choices: employees.map((employee) => ({
-          name: `${employee.first_name} ${employee.last_name}`,
-          value: employee.id,
-        })),
-      },
-      {
-        type: 'list',
-        name: 'roleId',
-        message: 'Which role do you want to assign the selected employee?',
-        choices: roles.map((role) => ({
-          name: role.title,
-          value: role.id,
-        })),
-      },
-    ]);
-    const { query, values } = updateEmploy('name', roleId, employeeId);
-    await pool.query({ text: query, values });
-  }
-};
-
+    try{
+      const employees = await this.getEmployees();
+      const roles = await this.getRoles();
+      const { employeeId, roleId } = await inquirer.prompt([
+        {
+          type: 'list',
+          name: 'employeeId',
+          message: 'Which employee do you want to update?',
+          choices: employees.map((employee) => ({
+            name: `${employee.first_name} ${employee.last_name}`,
+            value: employee.id,
+          })),
+        },
+        {
+          type: 'list',
+          name: 'roleId',
+          message: 'Which role do you want to assign the selected employee?',
+          choices: roles.map((role) => ({
+            name: role.title,
+            value: role.id,
+          })),
+        },
+      ]);
+      const { query, values } = updateEmploy('name', roleId, employeeId);
+      await pool.query({ text: query, values });
+    } catch (error) {
+      console.log('Error updating employee role ', error);
+      throw new Error('Failed to update employee role. Please try again later.');
+    }
+  };
+}
 
 
 
