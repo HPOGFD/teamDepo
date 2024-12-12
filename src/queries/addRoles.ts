@@ -1,6 +1,6 @@
 const addRoles = (title: string, salary: number, departmentId: number) => {
     return {
-        text: 'INSERT INTO roles (title, salary, department_id) VALUES ($1, $2, $3) RETURNING *',
+        text: 'INSERT INTO roles (title, salary, department_id) VALUES ($1, $2, $3)',
         values: [title, salary, departmentId]
     };
 }

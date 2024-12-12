@@ -165,7 +165,7 @@ static async getRoles() {
           })),
         },
       ]);
-      const { query, values } = updateEmploy('name', roleId, employeeId);
+      const { query, values } = updateEmploy(roleId, employeeId);
       await pool.query({ text: query, values });
     } catch (error) {
       console.log('Error updating employee role ', error);
