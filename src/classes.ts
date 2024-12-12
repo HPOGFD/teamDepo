@@ -6,6 +6,7 @@ import getEmployee from "./queries/getEmployee.js";
 import addDept from "./queries/addDept.js";
 import addRoles from "./queries/addRoles.js";
 import addEmploy from "./queries/addEmploy.js";
+import updateEmploy from "./queries/updateEmployee.js";
 
 class DatabaseService {
   static async getDepartments() {
@@ -119,7 +120,8 @@ class DatabaseService {
         })),
       },
     ]);
-    await pool.query('UPDATE employees SET role_id = $1 WHERE id = $2', [roleId, employeeId]);
+    const { query, values } = updateEmploy('name', roleId, employeeId);
+    await pool.query({ text: query, values });
   }
 };
 
