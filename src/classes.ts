@@ -2,6 +2,7 @@ import { pool } from "./connection.js";
 import inquirer from 'inquirer';
 import getDept from "./queries/getDepartements.js";
 import getRole from "./queries/getRole.js";
+import getEmployee from "./queries/getEmployee.js";
 
 class DatabaseService {
   static async getDepartments() {
@@ -13,20 +14,7 @@ class DatabaseService {
     return rows;
   }
   static async getEmployees() {
-    const { rows } = await pool.query(`
-      SELECT 
-      employees.id AS employee_id, 
-      employees.first_name, 
-      employees.last_name, 
-      roles.title, 
-      roles.salary, 
-      departments.name AS department, 
-      manager.first_name AS manager
-      FROM employees 
-      JOIN roles ON employees.role_id = roles.id 
-      JOIN departments ON roles.department_id = departments.id
-      LEFT JOIN employees AS manager ON employees.manager_id = manager.id;
-    `);
+    const { rows } = await pool.query(getEmployee());
     return rows;
   }
 
