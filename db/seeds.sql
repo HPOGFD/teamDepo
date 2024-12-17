@@ -35,13 +35,4 @@ VALUES
   ('Noah', 'Brown', 1, 3),
   ('Olivia', 'Davis', 2, 1),
   ('Parker', 'Oyarvide', 3, 2),
-  ('Quinn', 'Smith', 1, 3),
-  ('Riley', 'Brown', 2, 1),
-  ('Sophia', 'Davis', 3, 2),
-  ('Tyler', 'Oyarvide', 1, 3),
-  ('Uma', 'Smith', 2, 1),
-  ('Victor', 'Brown', 3, 2),
-  ('Willow', 'Davis', 1, 3),
-  ('Xavier', 'Oyarvide', 2, 1),
-  ('Yara', 'Smith', 3, 2),
-  ('Zane', 'Brown', 1, 3);
+  ('Quinn', 'Smith', 1, 3);
