@@ -1,4 +1,4 @@
-# teamDepo
+
 # 🚀 TeamDepo
 
 ### Your Go-To Application for Managing Teams and Projects Effortlessly 🧑‍💻🌟
@@ -76,11 +76,7 @@
 
 ## 💻 Usage
 
-- Run the app and follow the CLI prompts:
-   ```bash
-   npm start
-   ```
-- Use the intuitive menu to add/manage employees, roles, departments, and more!
+- Make sure you preload the datbase schema.sql and seeds.sql in your computer.
 
 ---
 
