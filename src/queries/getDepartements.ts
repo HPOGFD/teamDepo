@@ -1,4 +1,4 @@
 const getDept = () => {
-    return 'SELECT * FROM departments';
+    return 'SELECT id, name FROM departments;';
 }
 export default getDept;

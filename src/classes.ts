@@ -101,6 +101,8 @@ static async getRoles() {
     try{
       const roles = await this.getRoles();
       const manager = await this.getEmployees();
+      console.log(roles);
+      console.log(manager);
       const {firstName, lastName, roleId, managerId} = await inquirer.prompt([
         {
           type: 'input',
@@ -127,12 +129,12 @@ static async getRoles() {
           type: 'list',
           name: 'managerId',
           message: 'Enter manager ID:',
-          choices: manager.map((manager) => ({
-            name: manager.first_name,
-            value: manager.id,
+          choices: manager.map((man) => ({
+            name: man.first_name,
+            value: man.employee_id,
           })),
         }]);
-  
+        console.log(firstName, lastName, roleId, managerId);
         await pool.query(addEmploy(firstName, lastName, roleId, managerId));
     } catch (error) {
       console.log('Error adding employee ', error);
