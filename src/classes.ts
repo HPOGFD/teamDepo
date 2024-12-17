@@ -133,8 +133,7 @@ static async getRoles() {
           })),
         }]);
   
-      const { query, values } = addEmploy(firstName, lastName, roleId, managerId);
-      await pool.query({ text: query, values });
+        await pool.query(addEmploy(firstName, lastName, roleId, managerId));
     } catch (error) {
       console.log('Error adding employee ', error);
       throw new Error('Failed to add employee. Please try again later.');
@@ -165,8 +164,8 @@ static async getRoles() {
           })),
         },
       ]);
-      const { query, values } = updateEmploy(roleId, employeeId);
-      await pool.query({ text: query, values });
+     
+      await pool.query(updateEmploy(roleId, employeeId));
     } catch (error) {
       console.log('Error updating employee role ', error);
       throw new Error('Failed to update employee role. Please try again later.');
