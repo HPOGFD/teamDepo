@@ -75,7 +75,8 @@
 ---
 
 ## 💻 Usage
-
+ Demostration video https://www.loom.com/share/4a26904579b644fdb8f15de1f50519fd?sid=b755f8cb-8cc0-4329-88e0-690ffe5df126
+ 
 - Run the app and follow the CLI prompts:
    ```bash
    npm start
